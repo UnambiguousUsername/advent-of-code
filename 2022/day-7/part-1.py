@@ -1,9 +1,78 @@
+import time
+
+class file_system:
+	def __init__(self, **kwargs):
+		self.name = (
+			kwargs['name'] if 'name' in kwargs else 'UNKNOWN'
+		)
+		self.parent_directory = (
+			kwargs['parent'] if 'parent' in kwargs else None
+		)
+		self.child_directories = []
+		self.child_files = []
+		self.disk_size = 0
+
+	def __str__(self):
+		return self.name
+
+	def add_child_directory(self, elternteil, kind):
+		self.child_directories.append(file_system(parent=elternteil, name=kind))
+	def add_child_file(self, file):
+		self.child_files.append(file)
+
+	def calculate_disk_size(self):
+		size = 0
+		size += sum([int(x[0]) for x in self.child_files])
+		for child in self.child_directories:
+			size += child.get_disk_size()
+		self.disk_size = size
+
+	def get_child_directory(self, kind):
+		for child in self.child_directories:
+			if child.get_name() == kind:
+				return child
+		return None
+	def get_disk_size(self):
+		return self.disk_size
+	def get_name(self):
+		return self.name
+	def get_parent_directory(self):
+		return self.parent_directory
+
+	def traverse(self, size_array = []):
+		if self.child_directories:
+			for child in self.child_directories:
+				child.traverse(size_array)
+		elif not self.child_directories:
+			self.calculate_disk_size()
+		return size_array.append(self.disk_size)
+
 raw_file_contents = ''
 with open('input.txt', 'rt') as input:
-	raw_file_contents = input.readline()
+	raw_file_contents = input.readlines()
 
-temp = 0
+root_node = file_system(name='/')
+current_node = root_node
 for line in raw_file_contents:
-	pass
+	line_parts = line.rstrip().split(' ')
 
-print(temp)
+	if line_parts[1] == 'cd' and line_parts[0] == '$':
+		if line_parts[2] == '/':
+			continue
+		elif line_parts[2] == '..':
+			current_node = current_node.get_parent_directory()
+		else:
+			current_node = current_node.get_child_directory(line_parts[2])
+	elif line_parts[0] == 'dir':
+		current_node.add_child_directory(current_node, line_parts[1])
+	elif line_parts[0].isnumeric():
+		current_node.add_child_file(line_parts)
+	else:
+		continue
+
+print(root_node.traverse())
+# print(
+# 	sum(
+# 		[x for x in root_node.traverse() if x <= 100000]
+# 	)
+# )
