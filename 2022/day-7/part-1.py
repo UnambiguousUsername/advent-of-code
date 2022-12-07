@@ -43,9 +43,9 @@ class file_system:
 		if self.child_directories:
 			for child in self.child_directories:
 				child.traverse(size_array)
-		elif not self.child_directories:
-			self.calculate_disk_size()
-		return size_array.append(self.disk_size)
+		self.calculate_disk_size()
+		size_array.append(self.disk_size)
+		return size_array
 
 raw_file_contents = ''
 with open('input.txt', 'rt') as input:
@@ -70,9 +70,8 @@ for line in raw_file_contents:
 	else:
 		continue
 
-print(root_node.traverse())
-# print(
-# 	sum(
-# 		[x for x in root_node.traverse() if x <= 100000]
-# 	)
-# )
+print(
+	sum(
+		[x for x in root_node.traverse() if x <= 100000]
+	)
+)
