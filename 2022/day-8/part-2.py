@@ -17,42 +17,26 @@ for h in range(height):
 		current_tree = raw_file_contents[h][w]
 
 		for u in list([line[w] for line in raw_file_contents[:h]])[::-1]:
-			if len(up) == 0:
-				up.append(u)
-			elif u >= current_tree:
-				up.append(u)
+			up.append(u)
+			if u >= current_tree:
 				break
-			elif u >= up[-1]:
-				up.append(u)
 
 		if w < width - 1:
 			for r in list(raw_file_contents[h][w + 1:]):
-				if len(right) == 0:
-					right.append(r)
-				elif r >= current_tree:
-					right.append(r)
+				right.append(r)
+				if r >= current_tree:
 					break
-				elif r >= right[-1]:
-					right.append(r)
 
 		if h < height - 1:
 			for d in list([line[w] for line in raw_file_contents[h + 1:]]):
-				if len(down) == 0:
-					down.append(d)
-				elif d >= current_tree:
-					down.append(d)
+				down.append(d)
+				if d >= current_tree:
 					break
-				elif d >= down[-1]:
-					down.append(d)
 
 		for l in list(raw_file_contents[h][:w])[::-1]:
-			if len(left) == 0:
-				left.append(l)
-			elif l >= current_tree:
-				left.append(l)
+			left.append(l)
+			if l >= current_tree:
 				break
-			elif l >= left[-1]:
-				left.append(l)
 
 		scenic_score = (
 			len(up)
