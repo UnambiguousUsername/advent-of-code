@@ -14,47 +14,46 @@ for h in range(height):
 		right = []
 		down = []
 		left = []
-
+		current_tree = raw_file_contents[h][w]
 		
-		for u in range(h - 1, 0, -1):
-			next_tree = raw_file_contents[u][w]
+		for u in reversed([line[w] for line in raw_file_contents[:h]]):
 			if len(up) == 0:
-				up.append(next_tree)
-			elif next_tree > up[-1]:
-				up.append(next_tree)
-			
-			if up[-1] >= raw_file_contents[h][w]:
+				up.append(u)
+			elif u >= current_tree:
+				up.append(u)
 				break
+			elif u > up[-1]:
+				up.append(u)
 
-		for r in range(w + 1, width):
-			next_tree = raw_file_contents[h][r]
-			if len(right) == 0:
-				right.append(next_tree)
-			elif next_tree > right[-1]:
-				right.append(next_tree)
+		if w < width - 1:
+			for r in [raw_file_contents[h][w + 1:]]:
+				print([raw_file_contents[h][w + 1:]])
+				if len(right) == 0:
+					right.append(r)
+				elif r >= current_tree:
+					right.append(r)
+					break
+				elif r > right[-1]:
+					right.append(r)
 
-			if right[-1] >= raw_file_contents[h][w]:
-				break
+		if h < height - 1:
+			for d in [line[w] for line in raw_file_contents[h + 1:]]:
+				if len(down) == 0:
+					down.append(d)
+				elif d >= current_tree:
+					down.append(d)
+					break
+				elif d > down[-1]:
+					down.append(d)
 
-		for d in range(h + 1, height):
-			next_tree = raw_file_contents[d][w]
-			if len(down) == 0:
-				down.append(next_tree)
-			elif next_tree > down[-1]:
-				down.append(next_tree)
-
-			if down[-1] >= raw_file_contents[h][w]:
-				break
-
-		for l in range(w - 1, 0, -1):
-			next_tree = raw_file_contents[h][l]
+		for l in reversed([raw_file_contents[h][:w]]):
 			if len(left) == 0:
-				left.append(next_tree)
-			elif next_tree > left[-1]:
-				left.append(next_tree)
-
-			if left[-1] >= raw_file_contents[h][w]:
+				left.append(l)
+			elif l >= current_tree:
+				left.append(l)
 				break
+			elif l > left[-1]:
+				left.append(l)
 
 		scenic_score = (
 			len(up)
@@ -63,6 +62,7 @@ for h in range(height):
 			* len(left)
 		)
 		if scenic_score > best_scenic_score:
+			print(scenic_score)
 			best_scenic_score = scenic_score
 
 print(best_scenic_score)
