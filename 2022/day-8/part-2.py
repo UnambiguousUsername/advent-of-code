@@ -15,44 +15,43 @@ for h in range(height):
 		down = []
 		left = []
 		current_tree = raw_file_contents[h][w]
-		
-		for u in reversed([line[w] for line in raw_file_contents[:h]]):
+
+		for u in list([line[w] for line in raw_file_contents[:h]])[::-1]:
 			if len(up) == 0:
 				up.append(u)
 			elif u >= current_tree:
 				up.append(u)
 				break
-			elif u > up[-1]:
+			elif u >= up[-1]:
 				up.append(u)
 
 		if w < width - 1:
-			for r in [raw_file_contents[h][w + 1:]]:
-				print([raw_file_contents[h][w + 1:]])
+			for r in list(raw_file_contents[h][w + 1:]):
 				if len(right) == 0:
 					right.append(r)
 				elif r >= current_tree:
 					right.append(r)
 					break
-				elif r > right[-1]:
+				elif r >= right[-1]:
 					right.append(r)
 
 		if h < height - 1:
-			for d in [line[w] for line in raw_file_contents[h + 1:]]:
+			for d in list([line[w] for line in raw_file_contents[h + 1:]]):
 				if len(down) == 0:
 					down.append(d)
 				elif d >= current_tree:
 					down.append(d)
 					break
-				elif d > down[-1]:
+				elif d >= down[-1]:
 					down.append(d)
 
-		for l in reversed([raw_file_contents[h][:w]]):
+		for l in list(raw_file_contents[h][:w])[::-1]:
 			if len(left) == 0:
 				left.append(l)
 			elif l >= current_tree:
 				left.append(l)
 				break
-			elif l > left[-1]:
+			elif l >= left[-1]:
 				left.append(l)
 
 		scenic_score = (
@@ -62,7 +61,6 @@ for h in range(height):
 			* len(left)
 		)
 		if scenic_score > best_scenic_score:
-			print(scenic_score)
 			best_scenic_score = scenic_score
 
 print(best_scenic_score)
