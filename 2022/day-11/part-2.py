@@ -10,6 +10,7 @@ class Monkey:
 		self.test_divisor = int(input_list[2][-1])
 		self.business_associates = [int(input_list[3][-1]), int(input_list[4][-1])]
 		self.inspection_count = 0
+		self.reducer = 0
 
 	def inspect_items(self):
 		for i in range(len(self.items)):
@@ -23,13 +24,7 @@ class Monkey:
 					self.items[i] *= self.items[i] if self.operation[1] == 'old' else int(self.operation[1])
 				case '/':
 					self.items[i] /= self.items[i] if self.operation[1] == 'old' else int(self.operation[1])
-			self.reduce_item(i)
 
-	def reduce_item(self, i):
-		if self.items[i] % 10 == 0:
-			self.items[i] /= 10
-			self.reduce_item(i)
-			
 	def throw_items(self, monkey_list):
 		self.items = self.items[::1]
 		for i in range(len(self.items)):
